@@ -1,0 +1,13 @@
+.Login-Page {
+  text-align: center;
+  cursor: default;
+}
+
+h3 {
+    color: #005ed1;
+}
+
+h3:hover {
+    color: #029ee6;
+    cursor: default;
+}
