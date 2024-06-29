@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = (username, password) => {
+  const logout = () => {
      setLoggedIn(false);
      setCurrentAccount({});
   }
