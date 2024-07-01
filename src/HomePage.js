@@ -35,9 +35,26 @@ function HomePage() {
     const [multiplier, setMultiplier] = useState(1);
     const [baseClick, setBaseClick] = useState(1);
 
+    // game functions
     const drinkCoffee = () => {
         let newScore = score + (baseClick * multiplier);
         setScore(newScore);
+    }
+
+    const increaseBaseClick = (delta) => {
+        setBaseClick(baseClick + delta);
+    }
+
+    const increaseMultiplier = (delta) => {
+        setMultiplier(multiplier + delta);
+    }
+
+    const buyMachine = () => {
+        increaseBaseClick(1);
+    }
+
+    const buyUpgradeMachines = () => {
+        increaseMultiplier(1);
     }
 
 
@@ -58,8 +75,8 @@ function HomePage() {
             <StatusDashComponent/>
             <div className='game-elements'>
                 <div className='Main-Game'>
-                    <ClickComponent score={ score } drinkCoffee={ drinkCoffee }/>
-                    <ShopComponent/>
+                    <ClickComponent baseClick={ baseClick } multiplier={ multiplier } score={ score } drinkCoffee={ drinkCoffee }/>
+                    <ShopComponent buyMachine={ buyMachine } buyUpgradeMachines={ buyUpgradeMachines }/>
                 </div>
                 <div className='Side-Buttons'>
                     <button onClick={ skillTreeVisible ? closeSkillTree : openSkillTree }>Skill Tree</button>
