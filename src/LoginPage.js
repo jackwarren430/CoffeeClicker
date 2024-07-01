@@ -1,27 +1,39 @@
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
 
 
 function LoginPage() {
 
-    const { login, accounts } = useContext(AuthContext);
-
+    const { login, accounts, currentAccount } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
     const navigateSignup = () => {
         navigate('/signup');
     };
 
     const handleSubmit = () => {
-        if (accounts[username] == password) {
+        if (accounts[username] === password) {
             login(username, password);
             navigate('/');
         }
     }
 
-    let [username, setUsername] = useState("");
-    let [password, setPassword] = useState("");
+    useEffect(() => {
+        if (currentAccount && !(Object.keys(currentAccount).length === 0)) {
+            login(currentAccount["username"], currentAccount["password"]);
+            navigate('/home');
+        }
+        setIsLoading(false);
+    }, [navigate, currentAccount, login]);
+
+    if (isLoading) {
+        return(<div> Loading... </div>);
+    }
 
     return (
         <div className='Login-Page'>

@@ -1,13 +1,24 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [currentAccount, setCurrentAccount] = useState({});
+
+    // currentAccount
+  const [currentAccount, setCurrentAccount] = useState(() => {
+    const savedCurrentAccount = localStorage.getItem('currentAccount');
+    return savedCurrentAccount ? JSON.parse(savedCurrentAccount) : {};
+  });
+
   const [accounts, setAccounts] = useState({
     'jack.warren': 'password'
   });
 
+  useEffect(() => {
+    localStorage.setItem('currentAccount', JSON.stringify(currentAccount));
+  }, [currentAccount]);
+
+   // Add Account function
   const addAccount = (username, password) => {
     if (!accounts[username]) {
         setAccounts(prevAccounts => ({
@@ -19,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const login = (username, password) => {
-    if (accounts[username] && accounts[username] == password) {
+    if (accounts[username] && accounts[username] === password) {
         setLoggedIn(true);
         setCurrentAccount({username, password});
     }
@@ -29,7 +40,6 @@ export const AuthProvider = ({ children }) => {
      setLoggedIn(false);
      setCurrentAccount({});
   }
-
 
   return (
     <AuthContext.Provider value={{ loggedIn, login, logout, accounts, addAccount, currentAccount}}>

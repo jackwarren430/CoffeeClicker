@@ -1,19 +1,19 @@
 import './SignupPage.css';
 import { useNavigate } from 'react-router-dom';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
 
 
 function SignupPage() {
-    const { login, accounts, addAccount } = useContext(AuthContext);
-
+    const { login, accounts, addAccount, currentAccount } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
     const navigateLogin = () => {
         navigate('/login');
     };
-
-    let [username, setUsername] = useState("");
-    let [password, setPassword] = useState("");
 
     const handleSubmit = () => {
         if (!accounts[username]) {
@@ -21,6 +21,18 @@ function SignupPage() {
             login(username, password);
             navigate('/');
         }
+    }
+
+    useEffect(() => {
+        if (currentAccount && !(Object.keys(currentAccount).length === 0)) {
+            login(currentAccount["username"], currentAccount["password"]);
+            navigate('/home');
+        }
+        setIsLoading(false);
+    }, [navigate, currentAccount, login]);
+
+    if (isLoading) {
+        return(<div> Loading... </div>);
     }
 
 
